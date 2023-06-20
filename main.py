@@ -1,9 +1,14 @@
 import json
 import os
 
+# inputs
+packName = input('Enter Pack Name: ').lower()
+description = input('Enter Pack Description: ')
+trimName = input('Enter Trim Name: ').lower()
+trimItem = input('Enter Minecraft item to use as the template item: ')
+
 # create folders for DP and RP
 # DP
-packName = input('Enter Pack Name (All Lowercase): ')
 DP = './' + packName + 'Data/data/' + packName + '/trim_pattern'
 os.makedirs(DP)
 os.mkdir('./' + packName + 'Data/data/' + packName + '/recipes')
@@ -15,7 +20,6 @@ os.mkdir('./' + packName + 'Resource/assets/' + packName + '/lang')
 
 # DP creation
 # pack.mcmeta
-description = input('Enter Pack Description: ')
 pack = {
     "pack": {
         "pack_format": 15,
@@ -27,13 +31,12 @@ with open('./' + packName + 'Data/pack.mcmeta', 'w') as outfile:
     outfile.write(json_object)
 
 # main trim file
-trimName = input('Enter Trim Name (All Lowercase): ')
 trimPattern = {
     "asset_id": packName + ":" + trimName,
     "description": {
         "translate": "trim_pattern." + packName + '.' + trimName
     },
-    "template_item": "minecraft:stick"
+    "template_item": "minecraft:" + trimItem
 }
 json_object = json.dumps(trimPattern, indent=4)
 with open('./' + packName + 'Data/data/' + packName + '/trim_pattern/' + trimName + '.json', 'w') as outfile:
@@ -49,7 +52,7 @@ trimRecipe = {
         "tag": "minecraft:trimmable_armor"
     },
     "template": {
-        "item": "minecraft:stick"
+        "item": "minecraft:" + trimItem
     }
 }
 json_object = json.dumps(trimRecipe, indent=4)
