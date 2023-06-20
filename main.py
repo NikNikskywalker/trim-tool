@@ -78,9 +78,11 @@ texturesList = []
 while True:
     new_trim()
     finished = input('Add more trims? (Y/N): ')
-    if finished == 'Y' or 'y':
+    if finished == 'Y' or finished == 'y':
         continue
-    elif finished == 'N' or 'n':
+    elif finished == 'N' or finished == 'n':
+        break
+    else:
         break
 
 # armor trims atlas file
