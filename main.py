@@ -80,7 +80,7 @@ armorTrims = {
             "type": "paletted_permutations",
             "textures": [
                 packName + ":trims/models/armor/" + trimName,
-                packName + ":trims/models/armor/" + trimName + "pants"
+                packName + ":trims/models/armor/" + trimName + "_leggings"
             ],
             "palette_key": "trims/color_palettes/trim_palette",
             "permutations": {
