@@ -46,7 +46,7 @@ def new_trim():
         outfile.write(json_object)
 
     texturesList.append(packName + ":trims/models/armor/" + trimName)
-    texturesList.append(packName + ":trims/models/armor/" + trimName + "pants")
+    texturesList.append(packName + ":trims/models/armor/" + trimName + "_leggings")
 
 
 # Pack Creation
