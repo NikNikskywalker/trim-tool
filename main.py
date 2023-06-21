@@ -1,25 +1,61 @@
 import json
 import os
 
-# inputs
+
+def new_trim():
+    trimName = input('Enter Trim Name: ').lower()
+    trimItem = input('Enter Minecraft item to use as the template item: ')
+
+    # DP
+    # main trim file
+    trimPattern = {
+        "asset_id": packName + ":" + trimName,
+        "description": {
+            "translate": "trim_pattern." + packName + '.' + trimName
+        },
+        "template_item": "minecraft:" + trimItem
+    }
+    json_object = json.dumps(trimPattern, indent=4)
+    with open('./' + packName + 'Data/data/' + packName + '/trim_pattern/' + trimName + '.json', 'w') as outfile:
+        outfile.write(json_object)
+
+    # trim recipe file
+    trimRecipe = {
+        "type": "minecraft:smithing_trim",
+        "addition": {
+            "tag": "minecraft:trim_materials"
+        },
+        "base": {
+            "tag": "minecraft:trimmable_armor"
+        },
+        "template": {
+            "item": "minecraft:" + trimItem
+        }
+    }
+    json_object = json.dumps(trimRecipe, indent=4)
+    with open('./' + packName + 'Data/data/' + packName + '/recipes/' + trimName + '_trim.json', 'w') as outfile:
+        outfile.write(json_object)
+
+    # RP creation
+    # lang file
+    langFile = {
+        "trim_pattern." + packName + "." + trimName: trimName + " Armor Trim"
+    }
+    json_object = json.dumps(langFile, indent=4)
+    with open('./' + packName + 'Resource/assets/' + packName + '/lang/en_us.json', 'w') as outfile:
+        outfile.write(json_object)
+
+    texturesList.append(packName + ":trims/models/armor/" + trimName)
+    texturesList.append(packName + ":trims/models/armor/" + trimName + "_leggings")
+
+
+# Pack Creation
 packName = input('Enter Pack Name: ').lower()
 description = input('Enter Pack Description: ')
-trimName = input('Enter Trim Name: ').lower()
-trimItem = input('Enter Minecraft item to use as the template item: ')
-
-# create folders for DP and RP
-# DP
-DP = './' + packName + 'Data/data/' + packName + '/trim_pattern'
-os.makedirs(DP)
+# DP dir
+os.makedirs('./' + packName + 'Data/data/' + packName + '/trim_pattern')
 os.mkdir('./' + packName + 'Data/data/' + packName + '/recipes')
-# RP
-RP = './' + packName + 'Resource/assets/minecraft/atlases'
-os.makedirs(RP)
-os.makedirs('./' + packName + 'Resource/assets/' + packName + '/textures/trims/models/armor')
-os.mkdir('./' + packName + 'Resource/assets/' + packName + '/lang')
-
-# DP creation
-# pack.mcmeta
+# DP pack.mcmeta
 pack = {
     "pack": {
         "pack_format": 15,
@@ -29,59 +65,32 @@ pack = {
 json_object = json.dumps(pack, indent=4)
 with open('./' + packName + 'Data/pack.mcmeta', 'w') as outfile:
     outfile.write(json_object)
-
-# main trim file
-trimPattern = {
-    "asset_id": packName + ":" + trimName,
-    "description": {
-        "translate": "trim_pattern." + packName + '.' + trimName
-    },
-    "template_item": "minecraft:" + trimItem
-}
-json_object = json.dumps(trimPattern, indent=4)
-with open('./' + packName + 'Data/data/' + packName + '/trim_pattern/' + trimName + '.json', 'w') as outfile:
-    outfile.write(json_object)
-
-# trim recipe file
-trimRecipe = {
-    "type": "minecraft:smithing_trim",
-    "addition": {
-        "tag": "minecraft:trim_materials"
-    },
-    "base": {
-        "tag": "minecraft:trimmable_armor"
-    },
-    "template": {
-        "item": "minecraft:" + trimItem
-    }
-}
-json_object = json.dumps(trimRecipe, indent=4)
-with open('./' + packName + 'Data/data/' + packName + '/recipes/' + trimName + '_trim.json', 'w') as outfile:
-    outfile.write(json_object)
-
-# RP creation
-# pack.mcmeta
+# RP dir
+os.makedirs('./' + packName + 'Resource/assets/minecraft/atlases')
+os.makedirs('./' + packName + 'Resource/assets/' + packName + '/textures/trims/models/armor')
+os.mkdir('./' + packName + 'Resource/assets/' + packName + '/lang')
+# RP pack.mcmeta
 json_object = json.dumps(pack, indent=4)
 with open('./' + packName + 'Resource/pack.mcmeta', 'w') as outfile:
     outfile.write(json_object)
+texturesList = []
 
-# lang file
-langFile = {
-    "trim_pattern." + packName + "." + trimName: trimName + " Armor Trim"
-}
-json_object = json.dumps(langFile, indent=4)
-with open('./' + packName + 'Resource/assets/' + packName + '/lang/en_us.json', 'w') as outfile:
-    outfile.write(json_object)
+while True:
+    new_trim()
+    finished = input('Add more trims? (Y/N): ')
+    if finished == 'Y' or finished == 'y':
+        continue
+    elif finished == 'N' or finished == 'n':
+        break
+    else:
+        break
 
 # armor trims atlas file
 armorTrims = {
     "sources": [
         {
             "type": "paletted_permutations",
-            "textures": [
-                packName + ":trims/models/armor/" + trimName,
-                packName + ":trims/models/armor/" + trimName + "_leggings"
-            ],
+            "textures": texturesList,
             "palette_key": "trims/color_palettes/trim_palette",
             "permutations": {
                 "quartz": "trims/color_palettes/quartz",
